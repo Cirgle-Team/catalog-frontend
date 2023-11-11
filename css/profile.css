@@ -1,0 +1,62 @@
+/*
+color code
+#a7866b
+#b79880
+#ffbd75
+#f2f2f2
+#605c53
+*/
+
+.main-container {
+    display:flex;
+    flex-direction:column;
+}
+
+.top-banner {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    width:100%;
+    min-height:230px;
+
+    padding:47px 10px 10px 10px;
+
+    background-image: url("https://g-grafolio.pstatic.net/20211208_98/16389573716097tdKX_JPEG/%B5%E5%B8%B5%C5%A9%C4%C4%C7%BB%C5%CD.jpg");
+    background-size: contain;
+
+    text-align:center;
+    word-break: keep-all;
+}
+
+.content-container {
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+
+    width:100%;
+    padding:0px 20px 20px 20px;
+    max-width:500px;
+}
+
+.overlay-profile {
+    width:140px;
+    height:140px;
+
+    margin:0 auto;
+    margin-top:-70px;
+    margin-bottom:20px;
+
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+label {
+    margin-bottom:5px;
+}
+
+.form-control {
+    margin-bottom:10px;
+    padding-top:10px;
+    padding-bottom:10px;
+}
