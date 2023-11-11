@@ -42,22 +42,13 @@ color code
 #605c53
 */
 
-.nav-white {
-    display:flex;
-    flex-direction:row;
-    align-items:center;
-    justify-content:flex-start;
-
+.navbar {
     width:100%;
-    height:50px;
+    max-width:700px;
 
-    padding: 0px 20px 0px 20px;
+    padding: 10px 20px 10px 20px;
 
     background-color:white;
-}
-
-.brand-name {
-    margin: 0px 0px 0px 10px;
 }
 
 .main-container {
@@ -72,4 +63,5 @@ color code
     height:100%;
 
     background-color:#fcfcfc;
+    overflow: auto;
 }

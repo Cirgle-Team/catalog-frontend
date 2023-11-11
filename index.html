@@ -2,13 +2,12 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="/lib/bootstrap.css">
-        <link rel="script" href="/lib/bootstrap.js">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/04ed03d0b6.js" crossorigin="anonymous"></script>
         
         <link rel="stylesheet" href="/css/common.css">
         <link rel="stylesheet" href="/css/font.css">
         <link rel="stylesheet" href="/css/index.css">
-        <link rel="stylesheet" href="/css/smoke.css">
 
         <!--<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">-->
         <meta name="viewport" content="width=device-width">
@@ -25,17 +24,30 @@
     </head>
 
     <body>
-        <div class="main-container shadow">
-            <nav class="nav-white">
-                <i class="fa-solid fa-bars fa-xl"></i>
-                <h6 class="brand-name">Catalog</h6>
-            </nav>
-            <div class="top-banner">
-                <div class="banner-content">
-                    <h5>· 오늘의 커피 상식 ·</h5>
-                    <p>이재명은 구속을 피하기 위해서 단식을 진행했어요!</p>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <a class="navbar-brand" href="#">Catalog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="#">홈화면</a>
+                    <a class="nav-link" href="#">최근 기록</a>
+                    <a class="nav-link" href="#">프로필</a>
+                    <a class="nav-link" href="#">친구 관리</a>
+                    <a class="nav-link" href="#">설정</a>
                 </div>
             </div>
+        </nav>
+        <div class="main-container shadow">
+              
+            <div class="top-banner">
+                <div class="banner-content">
+                    <h5>· 오늘의 카페인 상식 ·</h5>
+                    <p>초콜릿에도 카페인이 있어요!</p>
+                </div>
+            </div>
+
             <div class="content-container">
                 <div class="overlay-banner shadow">
                     <h6>오늘의 카페인 섭취량</h6>
@@ -54,10 +66,9 @@
                 </div>
 
                 <!--Main Content Start-->
+                <h4 class="card-title" style="letter-spacing:-0.7px;">Recent Logs</h4>
                 <div class="content-card">
-                    <h4 class="card-title">싫어</h4>
-                    <div class="streak">
-                    </div>
+                    <div class="streak"></div>
                 </div>
             </div>
         </div>
@@ -68,4 +79,20 @@
     for (i = 0; i < 93; i++) {
         document.querySelector(".streak").innerHTML += '<div class="streak-unit"></div>';
     }
+
+    document.querySelectorAll(".streak-unit")[0].style.backgroundColor="#90be6d";
+    document.querySelectorAll(".streak-unit")[1].style.backgroundColor="#f9c74f";
+    document.querySelectorAll(".streak-unit")[2].style.backgroundColor="#f8961e";
+    document.querySelectorAll(".streak-unit")[3].style.backgroundColor="#f3722c";
+    document.querySelectorAll(".streak-unit")[4].style.backgroundColor="#f94144";
+    document.querySelectorAll(".streak-unit")[5].style.backgroundColor="#880000";
+
+    /*
+        Below 20% : #90be6d 
+        Between 21% ~ 40% : #f9c74f
+        Between 41% ~ 60% : #f8961e
+        Between 61% ~ 80% : #f3722c
+        Between 81% ~ 100% : #f94144
+        Between 81% ~ 100% : #000000
+    */
 </script>
