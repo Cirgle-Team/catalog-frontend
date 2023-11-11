@@ -17,81 +17,51 @@ color code
     padding-bottom:100px;
 }
 
-.nav {
-    position:absolute;
-    bottom:0;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content: center;
-
-    width:100%;
-    height:120px;
-}
-
-.nav-background {
-    position:absolute;
-    bottom:-380;
-    z-index:0;
-
-    width:250%;
-    height:500px;
-
-    border-radius:50%;
-
-    background-color:white;
-
-    box-shadow: 0 0 3px 0px rgba(0,0,0,255);
-}
-
-.nav-content {
-    z-index:1;
-
+.widget-container {
     display:flex;
     flex-direction:row;
     justify-content:space-around;
-    align-items:center;
 
     width:100%;
-    height:100%;
 
-    padding:20px;
-}
-
-.icon {
-    background: #666;
-    border-radius: 100%;
-    color: #ffffff;
-    cursor: default;
-    display: inline-block;
-    height: 2em;
-    line-height: 2em;
-    width: 2em;
     text-align:center;
 }
 
-.icon.accent1 {
-    background: #666;
-    color: #ffffff;
-}
+/* icon data */
 
-.icon.accent2 {
-    background: #e89980;
-    color: #ffffff;
-}
+    .icon {
+        background: #666;
+        border-radius: 100%;
+        color: #ffffff;
+        cursor: default;
+        display: inline-block;
+        height: 2em;
+        line-height: 2em;
+        width: 2em;
+        text-align:center;
+    }
 
-.icon.accent3 {
-    background: #7fcdb8;
-    color: #ffffff;
-}
+    .icon.accent1 {
+        background: #666;
+        color: #ffffff;
+    }
 
-.icon.accent4 {
-    background: #90b0ba;
-    color: #ffffff;
-}
+    .icon.accent2 {
+        background: #e89980;
+        color: #ffffff;
+    }
 
-.icon.accent5 {
-    background: #a7866b;
-    color: #ffffff;
-}
+    .icon.accent3 {
+        background: #7fcdb8;
+        color: #ffffff;
+    }
+
+    .icon.accent4 {
+        background: #90b0ba;
+        color: #ffffff;
+    }
+
+    .icon.accent5 {
+        background: #a7866b;
+        color: #ffffff;
+    }
