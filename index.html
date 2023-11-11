@@ -4,37 +4,68 @@
         <link rel="stylesheet" href="/lib/bootstrap.css">
         <link rel="script" href="/lib/bootstrap.js">
         <script src="https://kit.fontawesome.com/04ed03d0b6.js" crossorigin="anonymous"></script>
-
-        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         
-        <title>Catalog</title>
-
         <link rel="stylesheet" href="/css/common.css">
         <link rel="stylesheet" href="/css/font.css">
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/smoke.css">
+
+        <!--<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">-->
+        <meta name="viewport" content="width=device-width">
+        
+        <title>Catalog</title>
         
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-title" content="catalog">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
         
-        <!--
         <link rel="shortcut icon" sizes="256x256" href="/favicon.ico">
         <link rel="apple-touch-icon" sizes="256x256" href="/favicon.ico">
         <link rel="apple-touch-icon-precomposed" sizes="256x256" href="/favicon.ico">
-        -->
     </head>
 
     <body>
-        <div class="main-container">
-            <div class="nav-background"></div>
-            <div class="nav-data">
-                <!--
-                <h1><i class="fa-solid fa-house"></i></h1>
-                <h1><i class="fa-solid fa-calendar-days"></i></h1>
-                <h1><i class="fa-solid fa-user"></i></h1>
-                <h1><i class="fa-solid fa-star"></i></h1>
-                -->
-                <button class="btn btn-outline-primary"><b>sibal</b></button>
+        <div class="main-container shadow">
+            <nav class="nav-white">
+                <i class="fa-solid fa-bars fa-xl"></i>
+                <h6 class="brand-name">Catalog</h6>
+            </nav>
+            <div class="top-banner">
+                <div class="banner-content">
+                    <h5>· 오늘의 커피 상식 ·</h5>
+                    <p>이재명은 구속을 피하기 위해서 단식을 진행했어요!</p>
+                </div>
+            </div>
+            <div class="content-container">
+                <div class="overlay-banner shadow">
+                    <h6>오늘의 카페인 섭취량</h6>
+                    <div class="progress-container">
+                        <h1>20/100mg</h1>
+                        <div class="progress" role="progressbar" style="height:20px;">
+                            <div class="progress-bar" style="width: 20%">
+                                <h6><small>20.0%</small></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overlay-banner-btn-group">
+                        <button class="btn btn-outline-primary">프로필</button>
+                        <button class="btn btn-outline-primary">기록하기</button>
+                    </div>
+                </div>
+
+                <!--Main Content Start-->
+                <div class="content-card">
+                    <h4 class="card-title">싫어</h4>
+                    <div class="streak">
+                    </div>
+                </div>
             </div>
         </div>
     </body>
 </html>
+
+<script>
+    for (i = 0; i < 93; i++) {
+        document.querySelector(".streak").innerHTML += '<div class="streak-unit"></div>';
+    }
+</script>

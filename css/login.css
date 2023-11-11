@@ -1,0 +1,164 @@
+/*
+color code
+#a7866b
+#b79880
+#ffbd75
+#f2f2f2
+#605c53
+*/
+
+.main-container {
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+}
+
+.top-banner {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    width:100%;
+    height:250px;
+
+    padding:55px 10px 10px 10px;
+
+    background-color:#423022;
+
+    text-align:center;
+    word-break: keep-all;
+}
+
+.banner-content {
+    color:white;
+}
+
+.banner-content > h5 {
+    margin-bottom:2px;
+}
+
+.overlay-banner {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-around;
+
+    width:100%;
+    min-height:200px;
+    
+    padding:15px 40px 15px 40px;
+
+    background-color:white;
+    border-radius:10px;
+}
+
+.progress-container {
+    width:100%;
+    text-align:center;
+}
+
+.progress-container > h1 {
+    margin-bottom:5px;
+}
+
+.progress-bar {
+    text-align:center;
+    padding:0;
+}
+
+.overlay-banner-btn-group {
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    
+    width:100%;
+}
+
+.overlay-banner-btn-group > .btn {
+    margin:2px;
+    flex-grow:1;
+}
+
+.content-container {
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+
+    width:100%;
+    padding:20px;
+    max-width:500px;
+}
+
+.content-card {
+    width:100%;
+
+    padding:20px;
+    margin:10px 0 10px 0;
+    
+    background-color:white;
+    border-radius:5px;
+    
+    box-shadow: 0px 0px 4px 0px #AAA;
+}
+
+.card-title {
+    color:#333;
+}
+
+.streak {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+
+    margin:10px 0px 10px 0px;
+}
+
+.streak-unit {
+    width:15px;
+    height:15px;
+
+    margin:2px;
+
+    background-color:#CCC;
+    border-radius:3px;
+}
+
+/* icon data */
+
+    .icon {
+        background: #666;
+        border-radius: 100%;
+        color: #ffffff;
+        cursor: default;
+        display: inline-block;
+        height: 2em;
+        line-height: 2em;
+        width: 2em;
+        text-align:center;
+    }
+
+    .icon.accent1 {
+        background: #666;
+        color: #ffffff;
+    }
+
+    .icon.accent2 {
+        background: #e89980;
+        color: #ffffff;
+    }
+
+    .icon.accent3 {
+        background: #7fcdb8;
+        color: #ffffff;
+    }
+
+    .icon.accent4 {
+        background: #90b0ba;
+        color: #ffffff;
+    }
+
+    .icon.accent5 {
+        background: #a7866b;
+        color: #ffffff;
+    }
