@@ -25,14 +25,14 @@
     </head>
 
     <body>
-        <div class="main-container">
+        <div class="main-container shadow">
             <nav class="nav-white">
                 <i class="fa-solid fa-bars fa-xl"></i>
                 <h6 class="brand-name">Catalog</h6>
             </nav>
             <div class="top-banner">
                 <div class="banner-content">
-                    <h5>오늘의 커피 상식</h5>
+                    <h5>· 오늘의 커피 상식 ·</h5>
                     <p>이재명은 구속을 피하기 위해서 단식을 진행했어요!</p>
                 </div>
             </div>
@@ -52,7 +52,20 @@
                         <button class="btn btn-outline-primary">기록하기</button>
                     </div>
                 </div>
+
+                <!--Main Content Start-->
+                <div class="content-card">
+                    <h4 class="card-title">싫어</h4>
+                    <div class="streak">
+                    </div>
+                </div>
             </div>
         </div>
     </body>
 </html>
+
+<script>
+    for (i = 0; i < 93; i++) {
+        document.querySelector(".streak").innerHTML += '<div class="streak-unit"></div>';
+    }
+</script>
