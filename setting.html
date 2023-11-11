@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/lib/bootstrap.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/04ed03d0b6.js" crossorigin="anonymous"></script>
+        
+        <link rel="stylesheet" href="/css/common.css">
+        <link rel="stylesheet" href="/css/font.css">
+        <link rel="stylesheet" href="/css/setting.css">
+
+        <!--<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">-->
+        <meta name="viewport" content="width=device-width">
+        
+        <title>Catalog</title>
+        
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="catalog">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        
+        <link rel="shortcut icon" sizes="256x256" href="/favicon.ico">
+        <link rel="apple-touch-icon" sizes="256x256" href="/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" sizes="256x256" href="/favicon.ico">
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <a class="navbar-brand" href="/"><img src="/src/logo.png" alt="" width="20" height="20"> Catalog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="/index">홈화면</a>
+                    <a class="nav-link" href="/streak">최근 기록</a>
+                </div>
+            </div>
+        </nav>
+        <div class="main-container shadow">
+            <div class="content-container">
+                <h4 class="card-title">프로필</h4>
+                <div class="content-card profile-setup">
+                    <img class="background-image" src="https://g-grafolio.pstatic.net/20211208_98/16389573716097tdKX_JPEG/%B5%E5%B8%B5%C5%A9%C4%C4%C7%BB%C5%CD.jpg">
+
+                    <div class="profile-container">
+                        <img class="profile-image shadow"
+                             src="https://img.gqkorea.co.kr/gq/2023/07/style_64bb66023207f-1400x933.jpg">
+                        
+                        <div style="width:100%;">
+                            <h4 class="mb-1">이재명 같은 아인슈페너</h4>
+                            <h6>계정 가입날짜</h6>
+                        </div>
+
+                        <hr style="width:100%; opacity:0.1;">
+                        <table class="profile-elem">
+                            <tr>
+                                <td rowspan="2" style="width:40px; text-align:center;">
+                                    <i class="fa-regular fa-envelope fa-lg" style="padding-right:5px;"></i>
+                                </td>
+                                <td>
+                                    <h6>이메일</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    donghwi04@naver.com
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="profile-elem">
+                            <tr>
+                                <td rowspan="2" style="width:40px; text-align:center;">
+                                    <i class="fa-regular fa-calendar-check fa-lg" style="padding-right:5px;"></i>
+                                </td>
+                                <td>
+                                    <h6>최대 연속 성공 일 수</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    60일
+                                </td>
+                            </tr>
+                        </table>
+                        <hr style="width:100%; opacity:0.1;">
+                        <a href="#" style="color:#111;">수정하기</a>
+
+                        <form style="display:none;">
+                            <label>닉네임</label>
+                            <input class="form-control" type="text" value="크리미한 아인슈페너">
+
+                            <label>한 줄 소개</label>
+                            <input class="form-control" type="text" value="천재 이동휘">
+
+                            <label>생년월일 <small style="color:#AAA;">(다른 사용자에게 공개되지 않습니다.)</small></label>
+                            <input class="form-control" type="date" value="2023.11.09">
+
+                            <label>최대 성공일</label>
+                            <input class="form-control mb-3" type="text" disabled value="10일">
+                            
+                            <div style="width:100%; text-align:right;">
+                                <button class="btn btn-outline-primary">취소</button>
+                                <button class="btn btn-primary">수정하기</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <h4 class="card-title">친구</h4>
+                <div class="content-card">
+                    <div class="input-group">
+                        <input class="form-control focus-ring" style="--bs-focus-ring-color: rgba(0,0,0,0)" placeholder="친구 이메일을 검색하세요">
+                        <button class="btn btn-light" style="border:1px solid #DDD; border-left:none;">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+
+                    <hr style="width:100%; opacity:0.1;">
+                    
+                    <img class="alone-img" src="/src/sibal.webp">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
