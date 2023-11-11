@@ -39,23 +39,24 @@ color code
 .overlay-banner {
     display:flex;
     flex-direction:column;
-    align-items:center;
+    align-items:flex-start;
     justify-content:space-around;
 
     width:100%;
-    min-height:200px;
+    min-height:260px;
 
     margin-top:-140px;
     margin-bottom:40px;
-    padding:15px 40px 15px 40px;
+    padding:30px 20px 15px 20px;
 
     background-color:white;
     border-radius:10px;
+
+    text-align:left;
 }
 
 .progress-container {
     width:100%;
-    text-align:center;
 }
 
 .progress-container > h1 {
@@ -73,6 +74,8 @@ color code
     align-items:center;
     
     width:100%;
+
+    margin-top:10px;
 }
 
 .overlay-banner-btn-group > .btn {
@@ -104,6 +107,7 @@ color code
 
 .card-title {
     color:#333;
+    letter-spacing:-0.7px;
 }
 
 .streak {
@@ -121,6 +125,31 @@ color code
     background-color:#CCC;
     border-radius:3px;
     /* margin:10px 0px 10px 0px; */
+}
+
+.index-container {
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+
+    width:100%;
+    
+    padding-top:10px;
+    padding-right:40px;
+}
+
+.index-box {
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    width:49%;
+}
+
+.index-indicator {
+    border-radius:50%;
+    width:10px;
+    height:10px;
+    margin:5px;
 }
 
 /* icon data */

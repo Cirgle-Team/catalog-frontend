@@ -50,25 +50,61 @@
 
             <div class="content-container">
                 <div class="overlay-banner shadow">
-                    <h6>오늘의 카페인 섭취량</h6>
+                    <h5 style="letter-spacing:-1px;">남은 권장 섭취량</h5>
+                    <h1 style="font-size:2.8em; letter-spacing:-1px;">80<small style="font-size:0.6em;">mg</small></h1>
                     <div class="progress-container">
-                        <h1>20/100mg</h1>
-                        <div class="progress" role="progressbar" style="height:20px;">
-                            <div class="progress-bar" style="width: 20%">
-                                <h6><small>20.0%</small></h6>
+                        <div class="progress" role="progressbar" style="height:30px;">
+                            <div class="progress-bar" style="width: 80%">
+                                <h6><small>80mg</small></h6>
                             </div>
+                        </div>
+                        <div style="width:100%; padding-top:10px; display:flex; flex-direction: row; justify-content: space-between;">
+                            <h6>0mg</h6>
+                            <h6>100mg</h6>
                         </div>
                     </div>
                     <div class="overlay-banner-btn-group">
-                        <button class="btn btn-outline-primary">프로필</button>
-                        <button class="btn btn-outline-primary">기록하기</button>
+                        <button class="btn btn-outline-primary" style="padding-top:8px; padding-bottom:8px;">기록하기</button>
                     </div>
                 </div>
 
                 <!--Main Content Start-->
-                <h4 class="card-title" style="letter-spacing:-0.7px;">Recent Logs</h4>
+                <h4 class="card-title">Recent Logs</h4>
                 <div class="content-card">
                     <div class="streak"></div>
+                    <p style="margin:20px 0px 0px 0px; font-family: 'Pretendard-Regular'; color:#999;"><i class="fa-solid fa-circle-info"></i> 5일 연속 국밥을 먹었어요</p>
+                    <i class="fa-solid fa-arrow-right fa-lg" style="color:#777; margin:30px 0px 10px 0px;"></i>
+                </div>
+
+                <h4 class="card-title">Categories</h4>
+                <div class="content-card">
+                    <div class="progress-container" style="margin-top:3px;">
+                        <div class="progress" role="progressbar" style="height:20px; margin-bottom:2px;">
+                            <div class="progress-bar" style="width: 10%; background-color: #7f4f24;"></div>
+                            <div class="progress-bar" style="width: 10%; background-color: #a68a64;"></div>
+                            <div class="progress-bar" style="width: 60%; background-color: #936639;"></div>
+                            <div class="progress-bar" style="width: 10%; background-color: #582f0e;"></div>
+                        </div>
+                        <div class="index-container">
+                            <div class="index-box">
+                                <div class="index-indicator" style="background-color:#7f4f24;"></div>
+                                <small>커피<small>(10%)</small></small>
+                            </div>
+                            <div class="index-box">
+                                <div class="index-indicator" style="background-color:#a68a64;"></div>
+                                <small>에너지음료<small>(10%)</small></small>
+                            </div>
+                            <div class="index-box">
+                                <div class="index-indicator" style="background-color:#936639;"></div>
+                                <small>디저트<small>(10%)</small></small>
+                            </div>
+                            <div class="index-box">
+                                <div class="index-indicator" style="background-color:#582f0e;"></div>
+                                <small>기타<small>(10%)</small></small>
+                            </div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right fa-lg" style="color:#777; margin:30px 0px 10px 0px;"></i>
                 </div>
             </div>
         </div>
@@ -94,5 +130,17 @@
         Between 61% ~ 80% : #f3722c
         Between 81% ~ 100% : #f94144
         Between 81% ~ 100% : #000000
+    */
+
+    /*
+        #ddb892
+        #b08968
+        #7f5539
+        #9c6644
+
+        #a68a64
+        #936639
+        #7f4f24
+        #582f0e
     */
 </script>
