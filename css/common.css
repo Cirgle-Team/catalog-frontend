@@ -5,10 +5,34 @@ body {
 
     width:100%;
     height:100%;
+    
+    font-family: 'Pretendard-Regular';
+}
+
+p {
+    font-family: 'HakgyoansimWoojuR';
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height:1;
+    margin:0;
+}
+
+h1, h2 {
+    font-family: 'Pretendard-ExtraBold';
+}
+
+h3, h4 {
+    font-family: 'Pretendard-Bold';
+}
+
+h5, h6 {
+    font-family: 'Pretendard-Regular';
 }
 
 /*
 color code
+#423022
 #a7866b
 #b79880
 #ffbd75
@@ -27,5 +51,5 @@ color code
     max-width:700px;
     height:100%;
 
-    background-color: #a7866b;
+    background-color: #FFF;
 }
