@@ -1,4 +1,4 @@
-{
+ChuckNorisFacts = {
     "totalFacts": 18,
     "facts": [
         "카페인은 운동 성능을 향상시킬 수 있어요!",

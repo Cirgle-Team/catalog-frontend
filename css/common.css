@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     display:flex;
     flex-direction:column;
@@ -72,4 +76,8 @@ color code
 
     background-color:#fcfcfc;
     overflow: auto;
+}
+
+.content-container {
+    scroll-behavior: smooth;
 }

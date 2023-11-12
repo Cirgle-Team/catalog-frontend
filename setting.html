@@ -33,7 +33,8 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link" href="/index">홈화면</a>
-                    <a class="nav-link" href="/streak">최근 기록</a>
+                    <a class="nav-link" href="/streak">내 카페인 로그</a>
+                    <a class="nav-link" onclick="logout();">로그아웃</a>
                 </div>
             </div>
         </nav>
@@ -127,10 +128,16 @@
                 </div>
             </div>
         </div>
+        <form style="display:none;" id="upper"><input class="form-control" name="file" type="file" id="file_input" onchange="upload_file(1)"></form>
+        <form style="display:none;" id="upper2"><input class="form-control" name="file" type="file" id="file_input2" onchange="upload_file(2)"></form>
     </body>
 </html>
 
 <script>
+    function logout() {
+        localStorage.setItem('refreshToken', "");
+        location.href="/";
+    }
     if (!localStorage.getItem('refreshToken')) {
         location.href="./login";
     }
@@ -207,32 +214,32 @@
             };
 
             
-        //I am Asa but first
-        {
-            query = new FormData();
-            query.append("path", "api/v1/friends");
-            query.append("req", JSON.stringify({
-                                    "refreshToken" : localStorage.getItem('refreshToken'),
-                                }));
-            query.append("header", "Authorization:"+aToken);
-            query.append("method", "GET");
+            //I am Asa but first
+            {
+                query = new FormData();
+                query.append("path", "api/v1/friends");
+                query.append("req", JSON.stringify({
+                                        "refreshToken" : localStorage.getItem('refreshToken'),
+                                    }));
+                query.append("header", "Authorization:"+aToken);
+                query.append("method", "GET");
 
-            fetch('https://catalog.cirgle.me/relay.php', {
-                method: 'POST',
-                body: query
-            })
-            .then(res => res.json()).then(data => {
-                if (data["code"] != "success") {
-                    alert("친구 불러오기에 실패했습니다!\n");
-                    return;
-                }
-                for (i = 0; i < data["friends"].length; i++) {
-                    document.querySelector(".alone-img").style.display = "none";
-                    q = "/streakNo?q="+data["friends"][i]["displayId"];
-                    inssas.innerHTML += "<a href="+q+"><li>"+data["friends"][i]["nickname"]+"<br><small>("+data["friends"][i]["displayId"]+")</small></li></a>";
-                }
-            });
-        };
+                fetch('https://catalog.cirgle.me/relay.php', {
+                    method: 'POST',
+                    body: query
+                })
+                .then(res => res.json()).then(data => {
+                    if (data["code"] != "success") {
+                        alert("친구 불러오기에 실패했습니다!\n");
+                        return;
+                    }
+                    for (i = 0; i < data["friends"].length; i++) {
+                        document.querySelector(".alone-img").style.display = "none";
+                        q = "/streakNo?q="+data["friends"][i]["displayId"];
+                        inssas.innerHTML += "<a href="+q+"><li>"+data["friends"][i]["nickname"]+"<br><small>("+data["friends"][i]["displayId"]+")</small></li></a>";
+                    }
+                });
+            };
         }
     )};
 

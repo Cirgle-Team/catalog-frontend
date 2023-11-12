@@ -31,8 +31,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" href="/streak">최근 기록</a>
+                    <a class="nav-link" href="/streak">내 카페인 로그</a>
                     <a class="nav-link" href="/setting">설정</a>
+                    <a class="nav-link" onclick="logout();">로그아웃</a>
                 </div>
             </div>
         </nav>
@@ -41,7 +42,7 @@
             <div class="top-banner">
                 <div class="banner-content">
                     <h5>· 오늘의 카페인 상식 ·</h5>
-                    <p style="font-size:1.1em;">초콜릿에도 카페인이 있어요!</p>
+                    <p id="loginhalTTe" style="font-size:1.1em;">초콜릿에도 카페인이 있어요!</p>
                 </div>
             </div>
 
@@ -51,7 +52,7 @@
                     <h1 style="font-size:2.8em; letter-spacing:-1px;"><text id="remainCapacity"></text><small style="font-size:0.6em;">mg</small></h1>
                     <div class="progress-container">
                         <div class="progress" id="remainBarBox" role="progressbar" style="height:30px;">
-                            <div class="progress-bar" id="remainBar" style="width: 0%">
+                            <div class="progress-bar" id="remainBarisnotdefined" style="width: 0%">
                                 <h6><small id="remainKawaii"></small></h6>
                             </div>
                         </div>
@@ -144,7 +145,12 @@
     </body>
 </html>
 
+<script src="/src/facts.js" type="text/javascript"></script>
 <script>
+    function logout() {
+        localStorage.setItem('refreshToken', "");
+        location.href="/";
+    }
     if (!localStorage.getItem('refreshToken')) {
         location.href="./login";
     }
@@ -194,11 +200,22 @@
     
     // Signed in Status
 
+
+    let d = JSON.parse(JSON.stringify(ChuckNorisFacts)); 
+    const roooooo = Math.floor(Math.random() * 100000000) % d["totalFacts"];
+    loginhalTTe.innerText = d["facts"][roooooo];
+
+    function getDayOfWeek(yyyyMMdd){
+        const dayOfWeek = new Date(yyyyMMdd).getDay(); 
+        return dayOfWeek;
+    }
+
+
     aToken = ""
     maxCaffeineNum = 0;
     remainCapacityNum = 0;
     remainRatio = 0;
-
+    
     menuList = {"COFFEE":[], "ENERGY_DRINK":[], "DESSERT":[], "ETC":[]};
     
     query = new FormData();
@@ -206,8 +223,8 @@
     query.append("req", JSON.stringify({
                             "refreshToken" : localStorage.getItem('refreshToken'),
                         }));
-
-    //init
+                
+    window.onload = function() 
     {
         fetch('https://catalog.cirgle.me/relay.php', {
             method: 'POST',
@@ -259,7 +276,7 @@
                 if (data["caffeineLogDetail"]["streak"] > 0) {
                     streakAdvisor.innerText = data["caffeineLogDetail"]["streak"] + "일 연속 카페인을 건강하게 섭취했어요!";
                 } else {
-                    streakAdvisor.innerText = "건강을 생각해보는건 어떨까요?";
+                    streakAdvisor.innerText = "권장량을 넘겨 섭취했어요...";
                 }
                 //Core Part END
             });
@@ -307,16 +324,28 @@
                     remainBarBox.innerHTML = 
                         '<h6 style="width:100%; color:white; text-align:center;">오늘 '+abser+'mg 더 먹었어요!</h6>';
                 }
-                remainBar.style.width = remainRatio + "%";
+                
+                
+                document.getElementById("remainBarisnotdefined").style.width = remainRatio + "%";
                 //Core Part END
             });
             };
             //streak Today end
 
+            
+            today = new Date();   
+            year = today.getFullYear(); // 년도
+            month = today.getMonth() + 2;  // 월
+            date = today.getDate();  // 날짜
+            day = today.getDay();  // 요일
+            
+            nextMonthFirst = year + '-' + ((month) < 10 ? "0" + (month) : (month)) + '-01';
+            twoMonthAgo = year + '-' + ((month-3) < 10 ? "0" + (month-3) : (month-3)) + '-01';
+            nownow = year + '-' + ((month-1) < 10 ? "0" + (month-1) : (month-1)) + '-01';
             //streak Daily start
             {
                 query = new FormData();
-                query.append("path", "api/v1/caffeine-log/daily?start=2023-09-01&end=2023-12-01");
+                query.append("path", "api/v1/caffeine-log/daily?start="+twoMonthAgo+"&end="+nextMonthFirst);
                 query.append("req", JSON.stringify({
                                         "refreshToken" : localStorage.getItem('refreshToken'),
                                     }));
@@ -339,21 +368,29 @@
                         return;
                     }
                     //Core Part
-                    for (i = 0; i < 92; i++) {
+                    initLSB = 0;
+                    lk99 = 0;
+                    for (i = 0; i < data["caffeineLogs"].length; i++) {
+                        dft = new Date(data["caffeineLogs"][i]["date"]);
+                        fft = new Date(twoMonthAgo);
+                        df = Math.floor(Math.abs((dft - fft) / (1000 * 60 * 60 * 24)));
+                        
+                        //console.log(df);
+                        lk99 = initLSB + df;
                         if (!data["caffeineLogs"][i]["isSuccess"]) {
-                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#880000";
+                            document.querySelectorAll(".streak-unit")[lk99].style.backgroundColor="#880000";
                         } else {
                             r = data["caffeineLogs"][i]["consumedCaffeine"] / data["caffeineLogs"][i]["maxCaffeine"] * 100;
                             if (r <= 20) {
-                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#90be6d";
+                                document.querySelectorAll(".streak-unit")[lk99].style.backgroundColor="#90be6d";
                             } else if (r <= 40) {
-                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f9c74f";
+                                document.querySelectorAll(".streak-unit")[lk99].style.backgroundColor="#f9c74f";
                             } else if (r <= 60) {
-                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f8961e";
+                                document.querySelectorAll(".streak-unit")[lk99].style.backgroundColor="#f8961e";
                             } else if (r <= 80) {
-                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f3722c";
+                                document.querySelectorAll(".streak-unit")[lk99].style.backgroundColor="#f3722c";
                             } else {
-                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f94144";
+                                document.querySelectorAll(".streak-unit")[lk99].style.backgroundColor="#f94144";
                             }
                         }
                     }
@@ -395,13 +432,7 @@
                 });
             }
             //GetMenu end
-
-            let today = new Date();   
-            let year = today.getFullYear(); // 년도
-            let month = today.getMonth() + 1;  // 월
-            let date = today.getDate();  // 날짜
-            let day = today.getDay();  // 요일
-            GyuSo(year + '-' + month + '-' + date);
+            GyuSo(nownow);
         });
     }
 
