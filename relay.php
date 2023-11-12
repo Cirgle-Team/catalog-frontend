@@ -18,6 +18,14 @@ if (isset($_POST["method"])) {
     if ($_POST["method"] == "GET") {
         curl_setopt($ch,CURLOPT_POST, false);
     }
+    if ($_POST["method"] == "POST") {
+        curl_setopt($ch,CURLOPT_POST, true);
+        curl_setopt($ch,CURLOPT_POSTFIELDS, $_POST["req"]);
+    }
+    if ($_POST["method"] == "DELETE") {
+        //curl_setopt($ch,CURLOPT_POST, false);
+        die("아직 구현 안했어 이 씨발롬아");
+    }
 } else {
     curl_setopt($ch,CURLOPT_POSTFIELDS, $_POST["req"]);
 }

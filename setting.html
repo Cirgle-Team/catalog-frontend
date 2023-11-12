@@ -52,41 +52,43 @@
                         </div>
 
                         <hr style="width:100%; opacity:0.1;">
-                        <table class="profile-elem">
-                            <tr>
-                                <td rowspan="2" style="width:40px; text-align:center;">
-                                    <i class="fa-regular fa-envelope fa-lg" style="padding-right:5px;"></i>
-                                </td>
-                                <td>
-                                    <h6>이메일</h6>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    donghwi04@naver.com
-                                </td>
-                            </tr>
-                        </table>
+                        <div id="profile_static" style="width:100%; text-align:center;">
+                            <table class="profile-elem">
+                                <tr>
+                                    <td rowspan="2" style="width:40px; text-align:center;">
+                                        <i class="fa-regular fa-envelope fa-lg" style="padding-right:5px;"></i>
+                                    </td>
+                                    <td>
+                                        <h6>이메일</h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        donghwi04@naver.com
+                                    </td>
+                                </tr>
+                            </table>
 
-                        <table class="profile-elem">
-                            <tr>
-                                <td rowspan="2" style="width:40px; text-align:center;">
-                                    <i class="fa-regular fa-calendar-check fa-lg" style="padding-right:5px;"></i>
-                                </td>
-                                <td>
-                                    <h6>최대 연속 성공 일 수</h6>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    60일
-                                </td>
-                            </tr>
-                        </table>
-                        <hr style="width:100%; opacity:0.1;">
-                        <a href="#" style="color:#111;">수정하기</a>
+                            <table class="profile-elem">
+                                <tr>
+                                    <td rowspan="2" style="width:40px; text-align:center;">
+                                        <i class="fa-regular fa-calendar-check fa-lg" style="padding-right:5px;"></i>
+                                    </td>
+                                    <td>
+                                        <h6>최대 연속 성공 일 수</h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        60일
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr style="width:100%; opacity:0.1;">
+                            <a  onclick="showForm()" style="color:#111;">수정하기</a>
+                        </div>
 
-                        <form style="display:none;">
+                        <div id="form" style="display:none;">
                             <label>닉네임</label>
                             <input class="form-control" type="text" value="크리미한 아인슈페너">
 
@@ -100,10 +102,10 @@
                             <input class="form-control mb-3" type="text" disabled value="10일">
                             
                             <div style="width:100%; text-align:right;">
-                                <button class="btn btn-outline-primary">취소</button>
+                                <button onclick="showForm();" class="btn btn-outline-primary">취소</button>
                                 <button class="btn btn-primary">수정하기</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
@@ -128,5 +130,19 @@
 <script>
     if (!localStorage.getItem('refreshToken')) {
         location.href="./login";
+    }
+</script>
+
+<script>
+    function showForm() {
+      var x = document.querySelector("#form");
+      var y = document.querySelector("#profile_static");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        y.style.display = "none";
+      } else {
+        x.style.display = "none";
+        y.style.display = "block";
+      }
     }
 </script>

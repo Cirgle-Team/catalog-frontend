@@ -48,16 +48,16 @@
             <div class="content-container">
                 <div class="overlay-banner shadow">
                     <h5 style="letter-spacing:-1px;">남은 권장 섭취량</h5>
-                    <h1 style="font-size:2.8em; letter-spacing:-1px;"><text id="remainCapacity">80</text><small style="font-size:0.6em;">mg</small></h1>
+                    <h1 style="font-size:2.8em; letter-spacing:-1px;"><text id="remainCapacity"></text><small style="font-size:0.6em;">mg</small></h1>
                     <div class="progress-container">
-                        <div class="progress" role="progressbar" style="height:30px;">
-                            <div class="progress-bar" id="remainBar" style="width: 80%">
-                                <h6><small id="remainKawaii">80mg</small></h6>
+                        <div class="progress" id="remainBarBox" role="progressbar" style="height:30px;">
+                            <div class="progress-bar" id="remainBar" style="width: 0%">
+                                <h6><small id="remainKawaii"></small></h6>
                             </div>
                         </div>
                         <div style="width:100%; padding-top:10px; display:flex; flex-direction: row; justify-content: space-between;">
                             <h6>0mg</h6>
-                            <h6 id="maxCaffeine">100mg</h6>
+                            <h6 id="maxCaffeine"></h6>
                         </div>
                     </div>
                     <div class="overlay-banner-btn-group">
@@ -119,23 +119,23 @@
                     <div class="modal-body">
                         <select id="cat" class="form-select mb-2" onchange="catChange()">
                             <option value="no" selected>카테고리</option>
-                            <option value="1">커피</option>
-                            <option value="2">에너지음료</option>
-                            <option value="3">디저트</option>
-                            <option value="4">🎸 기타</option>
+                            <option value="COFFEE">커피</option>
+                            <option value="ENERGY_DRINK">에너지음료</option>
+                            <option value="DESSERT">디저트</option>
+                            <option value="ETC">기타</option>
                         </select>
                         <select id="menu" class="form-select mb-2" onchange="menuChange()">
                             <option value="no" selected>메뉴</option>
                         </select>
                         <div id="newMenu" style="display:none;">
-                            <input class="form-control mb-2" placeholder="메뉴명">
-                            <input id="newDensity" type=number inputmode="numeric" max="999" pattern="[0-9]*" class="form-control" placeholder="카페인 함량" onchange="if(this.value > 999) this.value=999;">
+                            <input id="newMenuName" class="form-control mb-2" placeholder="메뉴명">
                         </div>
+                        <input id="newDensity" disabled type=number inputmode="numeric" max="999" pattern="[0-9]*" class="form-control" placeholder="카페인 함량" onchange="if(this.value > 999) this.value=999;">
                     </div>
                     <div class="modal-footer" style="border:none;">
                         <button type="button" class="btn btn-sm btn-outline-primary"
                                 data-bs-dismiss="modal">취소</button>
-                        <button type="button" class="btn btn-sm btn-primary">기록하기</button>
+                        <button type="button" id="recordCommit" disabled class="btn btn-sm btn-primary">기록하기</button>
                     </div>
                 </div>
             </div>
@@ -154,6 +154,8 @@
     maxCaffeineNum = 0;
     remainCapacityNum = 0;
     remainRatio = 0;
+
+    menuList = {"COFFEE":[], "ENERGY_DRINK":[], "DESSERT":[], "ETC":[]};
     
     query = new FormData();
     query.append("path", "refresh");
@@ -161,93 +163,186 @@
                             "refreshToken" : localStorage.getItem('refreshToken'),
                         }));
 
-    fetch('https://catalog.cirgle.me/relay.php', {
-        method: 'POST',
-        body: query
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data["code"] != "success") {
-            alert("서버에 문제가 발생했습니다!\n");
-            return;
-        }
-        aToken = data["token"]["accessToken"];
+    //init
+    {
+        fetch('https://catalog.cirgle.me/relay.php', {
+            method: 'POST',
+            body: query
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data["code"] != "success") {
+                alert("서버에 문제가 발생했습니다!\n");
+                return;
+            }
+            aToken = data["token"]["accessToken"];
 
-        //streak Dog yo start
+            //streak Dog yo start
+            {
+                query = new FormData();
+                query.append("path", "api/v1/caffeine-log");
+                query.append("req", JSON.stringify({
+                                        "refreshToken" : localStorage.getItem('refreshToken'),
+                                    }));
+                query.append("header", "Authorization:"+aToken);
+                query.append("method", "GET");
+
+                fetch('https://catalog.cirgle.me/relay.php', {
+                    method: 'POST',
+                    body: query
+                })
+                .then(res => res.json())
+                .then(data => {
+                if (data["code"] != "success") {
+                    alert("서버에 문제가 발생했습니다!\n");
+                    return;
+                }
+                //Core Part
+                maxCaffeine.innerText = data["caffeineLogDetail"]["maxCaffeine"]+"mg";
+                maxCaffeineNum = data["caffeineLogDetail"]["maxCaffeine"];
+                if (data["caffeineLogDetail"]["maxStreak"] > 0) {
+                    streakAdvisor.innerText = data["caffeineLogDetail"]["maxStreak"] + "일째 카페인을 Null Null하게 마셨어요!";
+                } else {
+                    streakAdvisor.innerText = "건강을 생각해보는건 어떨까요?";
+                }
+                //Core Part END
+            });
+            }
+            //streak Dog yo end
+
+            //streak Today start
+            {
+                query = new FormData();
+                query.append("path", "api/v1/caffeine-log/today");
+                query.append("req", JSON.stringify({
+                                        "refreshToken" : localStorage.getItem('refreshToken'),
+                                    }));
+                query.append("header", "Authorization:"+aToken);
+                query.append("method", "GET");
+
+                fetch('https://catalog.cirgle.me/relay.php', {
+                    method: 'POST',
+                    body: query
+                })
+                .then(res => res.json())
+                .then(data => {
+                if (data["code"] != "success") {
+                    alert("서버에 문제가 발생했습니다!\n");
+                    return;
+                }
+                //Core Part
+                remainCapacityNum = maxCaffeineNum - (data["caffeineLog"]["consumedCaffeine"]-0) < 0 ? 0 : maxCaffeineNum - (data["caffeineLog"]["consumedCaffeine"]-0);
+                remainCapacity.innerText = remainCapacityNum;
+                remainKawaii.innerText = remainCapacityNum + "mg";
+                if (maxCaffeineNum - (data["caffeineLog"]["consumedCaffeine"]-0) >= 0) {
+                    remainRatio = remainCapacityNum / maxCaffeineNum * 100;
+                } else {
+                    abser = -(maxCaffeineNum - (data["caffeineLog"]["consumedCaffeine"]-0));
+                    remainRatio = 0;
+                    remainBarBox.style.backgroundColor = "#880000";
+                    remainBarBox.style.display = "flex";
+                    remainBarBox.style.flexDirection = "row";
+                    remainBarBox.style.alignItems = "center";
+                    remainBarBox.innerHTML = 
+                        '<h6 style="width:100%; color:white; text-align:center;">오늘 '+abser+'mg 더 먹었어요!</h6>';
+                }
+                remainBar.style.width = remainRatio + "%";
+                //Core Part END
+            });
+            };
+            //streak Today end
+
+            //streak Daily start
+            {
+                query = new FormData();
+                query.append("path", "api/v1/caffeine-log/daily?start=2023-09-01&end=2023-12-01");
+                query.append("req", JSON.stringify({
+                                        "refreshToken" : localStorage.getItem('refreshToken'),
+                                    }));
+                query.append("header", "Authorization:"+aToken);
+                query.append("method", "GET");
+
+                fetch('https://catalog.cirgle.me/relay.php', {
+                    method: 'POST',
+                    body: query
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data["code"] != "success") {
+                        alert("서버에 문제가 발생했습니다!\n");
+                        return;
+                    }
+                    //Core Part
+                    for (i = 0; i < 92; i++) {
+                        if (!data["caffeineLogs"][i]["isSuccess"]) {
+                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#880000";
+                        } else {
+                            r = data["caffeineLogs"][i]["consumedCaffeine"] / data["caffeineLogs"][i]["maxCaffeine"] * 100;
+                            if (r <= 20) {
+                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#90be6d";
+                            } else if (r <= 40) {
+                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f9c74f";
+                            } else if (r <= 60) {
+                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f8961e";
+                            } else if (r <= 80) {
+                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f3722c";
+                            } else {
+                                document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f94144";
+                            }
+                        }
+                    }
+                    //Core Part END
+                });
+            }
+            //streak Daily end
+
+            //GetMenu start
+            {
+                query = new FormData();
+                query.append("path", "api/v1/caffeine-menu");
+                query.append("req", JSON.stringify({
+                                        "refreshToken" : localStorage.getItem('refreshToken'),
+                                    }));
+                query.append("header", "Authorization:"+aToken);
+                query.append("method", "GET");
+
+                fetch('https://catalog.cirgle.me/relay.php', {
+                    method: 'POST',
+                    body: query
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data["code"] != "success") {
+                        alert("서버에 문제가 발생했습니다!\n");
+                        return;
+                    }
+                    //Core Part
+                    for (i = 0; i < data["menuList"].length; i++) {
+                        menuList[data["menuList"][i]["type"]].push([data["menuList"][i]["name"],data["menuList"][i]["caffeine"]]);
+                    }
+                    //Core Part END
+                });
+            }
+            //GetMenu end
+        });
+    }
+
+    recordCommit.onclick = () => {
+        //Submit start
         {
             query = new FormData();
             query.append("path", "api/v1/caffeine-log");
-            query.append("req", JSON.stringify({
-                                    "refreshToken" : localStorage.getItem('refreshToken'),
-                                }));
-            query.append("header", "Authorization:"+aToken);
-            query.append("method", "GET");
-
-            fetch('https://catalog.cirgle.me/relay.php', {
-                method: 'POST',
-                body: query
-            })
-            .then(res => res.json())
-            .then(data => {
-            if (data["code"] != "success") {
-                alert("서버에 문제가 발생했습니다!\n");
-                return;
-            }
-            //Core Part
-            maxCaffeine.innerText = data["caffeineLogDetail"]["maxCaffeine"]+"mg";
-            maxCaffeineNum = data["caffeineLogDetail"]["maxCaffeine"];
-            if (data["caffeineLogDetail"]["maxStreak"] > 0) {
-                streakAdvisor.innerText = data["caffeineLogDetail"]["maxStreak"] + "일째 카페인을 Null Null하게 마셨어요!";
+            if (menu.value == "self") {
+                tn = newMenuName.value;
             } else {
-                streakAdvisor.innerText = "건강을 생각해보는건 어떨까요?";
+                tn = menu.value;
             }
-            //Core Part END
-        });
-        }
-        //streak Dog yo end
-
-        
-        //streak Today start
-        {
-            query = new FormData();
-            query.append("path", "api/v1/caffeine-log/today");
             query.append("req", JSON.stringify({
-                                    "refreshToken" : localStorage.getItem('refreshToken'),
+                                    "menu" : tn,
+                                    "type" : cat.value,
+                                    "caffeine" : newDensity.value
                                 }));
             query.append("header", "Authorization:"+aToken);
-            query.append("method", "GET");
-
-            fetch('https://catalog.cirgle.me/relay.php', {
-                method: 'POST',
-                body: query
-            })
-            .then(res => res.json())
-            .then(data => {
-            if (data["code"] != "success") {
-                alert("서버에 문제가 발생했습니다!\n");
-                return;
-            }
-            //Core Part
-            remainCapacityNum = maxCaffeineNum - (data["caffeineLog"]["consumedCaffeine"]-0) < 0 ? 0 : maxCaffeineNum -  (data["caffeineLog"]["consumedCaffeine"]-0);
-            remainCapacity.innerText = remainCapacityNum;
-            remainKawaii.innerText = remainCapacityNum + "mg";
-            remainRatio = remainCapacityNum / maxCaffeineNum * 100;
-            remainBar.style.width = remainRatio + "%";
-            //Core Part END
-        });
-        };
-        //streak Today end
-
-        
-        //streak Daily start
-        {
-            query = new FormData();
-            query.append("path", "api/v1/caffeine-log/daily?start=2023-09-01&end=2023-12-01");
-            query.append("req", JSON.stringify({
-                                    "refreshToken" : localStorage.getItem('refreshToken'),
-                                }));
-            query.append("header", "Authorization:"+aToken);
-            query.append("method", "GET");
 
             fetch('https://catalog.cirgle.me/relay.php', {
                 method: 'POST',
@@ -260,66 +355,33 @@
                     return;
                 }
                 //Core Part
-                for (i = 0; i < 92; i++) {
-                    if (!data["caffeineLogs"][i]["isSuccess"]) {
-                        document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#880000";
-                    } else {
-                        r = data["caffeineLogs"][i]["consumedCaffeine"] / data["caffeineLogs"][i]["maxCaffeine"] * 100;
-                        if (r <= 20) {
-                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#90be6d";
-                        } else if (r <= 40) {
-                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f9c74f";
-                        } else if (r <= 60) {
-                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f8961e";
-                        } else if (r <= 80) {
-                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f3722c";
-                        } else {
-                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f94144";
-                        }
-                    }
-                }
+                alert("카페인 소비가 성공적으로 기록되었습니다!");
+                location.href="/";
                 //Core Part END
             });
         }
-        //streak Daily end
-    });
+        //Submit GetMenu end
+    };
 
     document.querySelector('#newDensity').addEventListener('keyup', function(){
         if(document.querySelector('#newDensity').value > 999) {
-            document.querySelector('#newDensity').value=999;
+            document.querySelector('#newDensity').value=1000;
+        }
+        if (document.querySelector("#newDensity").value > 0 && document.querySelector("#newDensity").value <= 1000) {
+            recordCommit.removeAttribute("disabled");
+        } else {
+            recordCommit.setAttribute("disabled", "1");
         }
     });
 
     function catChange() {
         if (cat.value == "no") {
             menu.innerHTML = '<option value="no" selected>메뉴</option>';
-        } else if (cat.value == "1") {
-            //커피
-            menu.innerHTML = '<option value="no" selected>메뉴</option>';
-            menu.innerHTML += '<option value="1">아메리카노</option>';
-            menu.innerHTML += '<option value="2">카페라떼</option>';
-            menu.innerHTML += '<option value="self">직접 작성하기</option>';
-        } else if (cat.value == "2") {
-            //에너지음료
-            menu.innerHTML = '<option value="no" selected>메뉴</option>';
-            menu.innerHTML += '<option value="1">몬스터류</option>';
-            menu.innerHTML += '<option value="2">핫식스류</option>';
-            menu.innerHTML += '<option value="3">레드불(250mL)</option>';
-            menu.innerHTML += '<option value="4">레드불(355mL)</option>';
-            menu.innerHTML += '<option value="self">직접 작성하기</option>';
-        } else if (cat.value == "3") {
-            //디저트
-            menu.innerHTML = '<option value="no" selected>메뉴</option>';
-            menu.innerHTML += '<option value="1">초코 조각 케이크</option>';
-            menu.innerHTML += '<option value="self">직접 작성하기</option>';
-        } else if (cat.value == "4") {
-            //기타
-            menu.innerHTML = '<option value="no" selected>메뉴</option>';
-            menu.innerHTML += '<option value="1">밀크티</option>';
-            menu.innerHTML += '<option value="2">녹차</option>';
-            menu.innerHTML += '<option value="self">직접 작성하기</option>';
         } else {
             menu.innerHTML = '<option value="no" selected>메뉴</option>';
+            for (i = 0; i < menuList[cat.value].length; i++) {
+                menu.innerHTML += '<option value="'+menuList[cat.value][i][0]+'">'+menuList[cat.value][i][0]+'</option>';
+            }
             menu.innerHTML += '<option value="self">직접 작성하기</option>';
         }
         menuChange();
@@ -328,7 +390,22 @@
     function menuChange() {
         if (menu.value == "self") {
             newMenu.style.display = "block";
+            newDensity.removeAttribute("disabled");
+            newDensity.value = 0;
         } else {
+            if (menu.value == "no") {
+                newDensity.setAttribute("disabled", 1);
+                recordCommit.setAttribute("disabled", 1);
+            } else {
+                for (i = 0; i < menuList[cat.value].length; i++) {
+                    if (menuList[cat.value][i][0] == menu.value) {
+                        newDensity.value=menuList[cat.value][i][1];
+                        break;
+                    }
+                }
+                newDensity.removeAttribute("disabled");
+                recordCommit.removeAttribute("disabled");
+            }
             newMenu.style.display = "none";
         }
     }
