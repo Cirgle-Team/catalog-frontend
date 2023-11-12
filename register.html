@@ -31,15 +31,14 @@
                     <p style="font-size:1.2em;" class="mb-3">카페인 탈출을 기록하다</p>
 
                     <label class="form-label mb-1">생년월일</label>
-                    <input type="date" id="birth" class="form-control mb-3" style="padding-top:12px; padding-bottom:12px;" >
+                    <input type="date" id="birthday" class="form-control mb-3" style="padding-top:12px; padding-bottom:12px;" >
                     
-                    <input type="email" id="id" class="form-control mb-2" style="padding-top:12px; padding-bottom:12px;" placeholder="이메일">
-                    <input type="password" id="pw" class="form-control mb-2" style="padding-top:12px; padding-bottom:12px;" placeholder="비밀번호">
-                    <input type="password" id="pwc" class="form-control mb-3" style="padding-top:12px; padding-bottom:12px;" placeholder="비밀번호 확인">
+                    <input type="email" id="displayId" class="form-control mb-2" style="padding-top:12px; padding-bottom:12px;" placeholder="이메일">
+                    <input type="password" id="password" class="form-control mb-2" style="padding-top:12px; padding-bottom:12px;" placeholder="비밀번호">
+                    <input type="password" id="passChk" class="form-control mb-3" style="padding-top:12px; padding-bottom:12px;" placeholder="비밀번호 확인">
 
                     <button type="submit" id="submitter" class="btn btn-primary mb-2"
-                            disabled style="width:100%; padding:10px 0px 10px 0px;"
-                            onclick="alert('존나 지랄하노ㅋㅋ')">회원가입</button>
+                            disabled style="width:100%; padding:10px 0px 10px 0px;">회원가입</button>
                     <a style="color:#888">계정이 있으신가요?</a>&nbsp;&nbsp;<a href="./login" style="color:#111">로그인</a>
                 </div>
             </div>
@@ -48,9 +47,33 @@
 </html>
 
 <script>
+submitter.onclick = () => {
+    data = new FormData();
+    data.append("path", "register");
+    data.append("req", JSON.stringify({
+                            "id" : displayId.value,
+                            "password" : password.value,
+                            "birthday" : birthday.value,
+                        }));
+
+    fetch('https://catalog.cirgle.me/relay.php', {
+        method: 'POST',
+        body: data
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data["code"] != "success") {
+            alert("회원가입에 실패했습니다!\n상세 : "+data["message"]);
+            return;
+        }
+        alert("회원가입에 성공했습니다!");
+        location.href="/login";
+    });
+};
+
 document.querySelector('body').addEventListener('keyup', function(){
-    if (id.value != "" && birth.value != "" && pw.value != "" && pwc.value != "") {
-        if (pw.value == pwc.value) {
+    if (displayId.value != "" && birthday.value != "" && password.value != "" && passChk.value != "") {
+        if (password.value == passChk.value) {
             submitter.removeAttribute("disabled");
         } else {
             submitter.setAttribute("disabled", "true");

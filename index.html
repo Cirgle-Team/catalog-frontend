@@ -48,16 +48,16 @@
             <div class="content-container">
                 <div class="overlay-banner shadow">
                     <h5 style="letter-spacing:-1px;">남은 권장 섭취량</h5>
-                    <h1 style="font-size:2.8em; letter-spacing:-1px;">80<small style="font-size:0.6em;">mg</small></h1>
+                    <h1 style="font-size:2.8em; letter-spacing:-1px;"><text id="remainCapacity">80</text><small style="font-size:0.6em;">mg</small></h1>
                     <div class="progress-container">
                         <div class="progress" role="progressbar" style="height:30px;">
-                            <div class="progress-bar" style="width: 80%">
-                                <h6><small>80mg</small></h6>
+                            <div class="progress-bar" id="remainBar" style="width: 80%">
+                                <h6><small id="remainKawaii">80mg</small></h6>
                             </div>
                         </div>
                         <div style="width:100%; padding-top:10px; display:flex; flex-direction: row; justify-content: space-between;">
                             <h6>0mg</h6>
-                            <h6>100mg</h6>
+                            <h6 id="maxCaffeine">100mg</h6>
                         </div>
                     </div>
                     <div class="overlay-banner-btn-group">
@@ -71,7 +71,8 @@
                     <div class="streak"></div>
                     <p style="margin:20px 0px 0px 0px; font-family: 'Pretendard-Regular'; color:#999;">
                         <i class="fa-solid fa-circle-info"></i>
-                        건강이 ㅈ되기 시작했어요!
+                        <text  id="streakAdvisor">
+                        </text>
                     </p>
                     <i class="fa-solid fa-arrow-right fa-lg" style="color:#777; margin:30px 0px 10px 0px;"></i>
                 </div>
@@ -143,6 +144,146 @@
 </html>
 
 <script>
+    if (!localStorage.getItem('refreshToken')) {
+        location.href="./login";
+    }
+
+    // Signed in Status
+
+    aToken = ""
+    maxCaffeineNum = 0;
+    remainCapacityNum = 0;
+    remainRatio = 0;
+    
+    query = new FormData();
+    query.append("path", "refresh");
+    query.append("req", JSON.stringify({
+                            "refreshToken" : localStorage.getItem('refreshToken'),
+                        }));
+
+    fetch('https://catalog.cirgle.me/relay.php', {
+        method: 'POST',
+        body: query
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data["code"] != "success") {
+            alert("서버에 문제가 발생했습니다!\n");
+            return;
+        }
+        aToken = data["token"]["accessToken"];
+
+        //streak Dog yo start
+        {
+            query = new FormData();
+            query.append("path", "api/v1/caffeine-log");
+            query.append("req", JSON.stringify({
+                                    "refreshToken" : localStorage.getItem('refreshToken'),
+                                }));
+            query.append("header", "Authorization:"+aToken);
+            query.append("method", "GET");
+
+            fetch('https://catalog.cirgle.me/relay.php', {
+                method: 'POST',
+                body: query
+            })
+            .then(res => res.json())
+            .then(data => {
+            if (data["code"] != "success") {
+                alert("서버에 문제가 발생했습니다!\n");
+                return;
+            }
+            //Core Part
+            maxCaffeine.innerText = data["caffeineLogDetail"]["maxCaffeine"]+"mg";
+            maxCaffeineNum = data["caffeineLogDetail"]["maxCaffeine"];
+            if (data["caffeineLogDetail"]["maxStreak"] > 0) {
+                streakAdvisor.innerText = data["caffeineLogDetail"]["maxStreak"] + "일째 카페인을 Null Null하게 마셨어요!";
+            } else {
+                streakAdvisor.innerText = "건강을 생각해보는건 어떨까요?";
+            }
+            //Core Part END
+        });
+        }
+        //streak Dog yo end
+
+        
+        //streak Today start
+        {
+            query = new FormData();
+            query.append("path", "api/v1/caffeine-log/today");
+            query.append("req", JSON.stringify({
+                                    "refreshToken" : localStorage.getItem('refreshToken'),
+                                }));
+            query.append("header", "Authorization:"+aToken);
+            query.append("method", "GET");
+
+            fetch('https://catalog.cirgle.me/relay.php', {
+                method: 'POST',
+                body: query
+            })
+            .then(res => res.json())
+            .then(data => {
+            if (data["code"] != "success") {
+                alert("서버에 문제가 발생했습니다!\n");
+                return;
+            }
+            //Core Part
+            remainCapacityNum = maxCaffeineNum - (data["caffeineLog"]["consumedCaffeine"]-0) < 0 ? 0 : maxCaffeineNum -  (data["caffeineLog"]["consumedCaffeine"]-0);
+            remainCapacity.innerText = remainCapacityNum;
+            remainKawaii.innerText = remainCapacityNum + "mg";
+            remainRatio = remainCapacityNum / maxCaffeineNum * 100;
+            remainBar.style.width = remainRatio + "%";
+            //Core Part END
+        });
+        };
+        //streak Today end
+
+        
+        //streak Daily start
+        {
+            query = new FormData();
+            query.append("path", "api/v1/caffeine-log/daily?start=2023-09-01&end=2023-12-01");
+            query.append("req", JSON.stringify({
+                                    "refreshToken" : localStorage.getItem('refreshToken'),
+                                }));
+            query.append("header", "Authorization:"+aToken);
+            query.append("method", "GET");
+
+            fetch('https://catalog.cirgle.me/relay.php', {
+                method: 'POST',
+                body: query
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data["code"] != "success") {
+                    alert("서버에 문제가 발생했습니다!\n");
+                    return;
+                }
+                //Core Part
+                for (i = 0; i < 92; i++) {
+                    if (!data["caffeineLogs"][i]["isSuccess"]) {
+                        document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#880000";
+                    } else {
+                        r = data["caffeineLogs"][i]["consumedCaffeine"] / data["caffeineLogs"][i]["maxCaffeine"] * 100;
+                        if (r <= 20) {
+                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#90be6d";
+                        } else if (r <= 40) {
+                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f9c74f";
+                        } else if (r <= 60) {
+                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f8961e";
+                        } else if (r <= 80) {
+                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f3722c";
+                        } else {
+                            document.querySelectorAll(".streak-unit")[i].style.backgroundColor="#f94144";
+                        }
+                    }
+                }
+                //Core Part END
+            });
+        }
+        //streak Daily end
+    });
+
     document.querySelector('#newDensity').addEventListener('keyup', function(){
         if(document.querySelector('#newDensity').value > 999) {
             document.querySelector('#newDensity').value=999;
@@ -196,6 +337,8 @@
         document.querySelector(".streak").innerHTML += '<div class="streak-unit"></div>';
     }
 
+    /*
+
     document.querySelectorAll(".streak-unit")[0].style.backgroundColor="#90be6d";
     document.querySelectorAll(".streak-unit")[1].style.backgroundColor="#f9c74f";
     document.querySelectorAll(".streak-unit")[2].style.backgroundColor="#f8961e";
@@ -203,6 +346,7 @@
     document.querySelectorAll(".streak-unit")[4].style.backgroundColor="#f94144";
     document.querySelectorAll(".streak-unit")[5].style.backgroundColor="#880000";
 
+    */
     /*
         Below 20% : #90be6d 
         Between 21% ~ 40% : #f9c74f

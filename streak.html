@@ -7,7 +7,7 @@
         
         <link rel="stylesheet" href="/css/common.css">
         <link rel="stylesheet" href="/css/font.css">
-        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/streak.css">
 
         <!--<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">-->
         <meta name="viewport" content="width=device-width">
@@ -37,35 +37,7 @@
             </div>
         </nav>
         <div class="main-container shadow">
-              
-            <div class="top-banner">
-                <div class="banner-content">
-                    <h5>· 오늘의 카페인 상식 ·</h5>
-                    <p style="font-size:1.1em;">초콜릿에도 카페인이 있어요!</p>
-                </div>
-            </div>
-
             <div class="content-container">
-                <div class="overlay-banner shadow">
-                    <h5 style="letter-spacing:-1px;">남은 권장 섭취량</h5>
-                    <h1 style="font-size:2.8em; letter-spacing:-1px;">80<small style="font-size:0.6em;">mg</small></h1>
-                    <div class="progress-container">
-                        <div class="progress" role="progressbar" style="height:30px;">
-                            <div class="progress-bar" style="width: 80%">
-                                <h6><small>80mg</small></h6>
-                            </div>
-                        </div>
-                        <div style="width:100%; padding-top:10px; display:flex; flex-direction: row; justify-content: space-between;">
-                            <h6>0mg</h6>
-                            <h6>100mg</h6>
-                        </div>
-                    </div>
-                    <div class="overlay-banner-btn-group">
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#recordModal" style="padding-top:8px; padding-bottom:8px;">기록하기</button>
-                    </div>
-                </div>
-
-                <!--Main Content Start-->
                 <h4 class="card-title">Recent Logs</h4>
                 <div class="content-card">
                     <div class="streak"></div>
@@ -142,7 +114,11 @@
     </body>
 </html>
 
-<script>
+<script>    
+    if (!localStorage.getItem('refreshToken')) {
+        location.href="./login";
+    }
+
     document.querySelector('#newDensity').addEventListener('keyup', function(){
         if(document.querySelector('#newDensity').value > 999) {
             document.querySelector('#newDensity').value=999;

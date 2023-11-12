@@ -30,12 +30,11 @@
                     <h1 style="margin-bottom:2px;">카탈로그</h1>
                     <p style="font-size:1.2em;" class="mb-3">카페인 탈출을 기록하다</p>
 
-                    <input type="id" id="id" class="form-control mb-2" style="padding-top:12px; padding-bottom:12px;" placeholder="이메일">
-                    <input type="password" id="pw" class="form-control mb-3" style="padding-top:12px; padding-bottom:12px;" placeholder="비밀번호">
+                    <input type="id" id="displayId" class="form-control mb-2" style="padding-top:12px; padding-bottom:12px;" placeholder="이메일">
+                    <input type="password" id="password" class="form-control mb-3" style="padding-top:12px; padding-bottom:12px;" placeholder="비밀번호">
 
                     <button type="submit" id="submitter" class="btn btn-primary mb-2"
-                            disabled style="width:100%; padding:10px 0px 10px 0px;"
-                            onclick="alert('로그인이 되겠냐고 아ㅋㅋ')">로그인</button>
+                            disabled style="width:100%; padding:10px 0px 10px 0px;">로그인</button>
                     <a style="color:#888">계정이 없으신가요?</a>&nbsp;&nbsp;<a href="./register" style="color:#111">회원가입</a>
                 </div>
             </div>
@@ -44,8 +43,32 @@
 </html>
 
 <script>
+submitter.onclick = () => {
+    data = new FormData();
+    data.append("path", "login");
+    data.append("req", JSON.stringify({
+                            "id" : displayId.value,
+                            "password" : password.value,
+                        }));
+
+    fetch('https://catalog.cirgle.me/relay.php', {
+        method: 'POST',
+        body: data
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data["code"] != "success") {
+            alert("로그인에 실패했습니다!\n상세 : "+data["message"]);
+            return;
+        }
+        localStorage.setItem("refreshToken", data["token"]["refreshToken"]);
+        alert("로그인에 성공했습니다!");
+        location.href="/";
+    });
+};
+
 document.querySelector('body').addEventListener('keyup', function(){
-    if (id.value != "" && pw.value != "") {
+    if (displayId.value != "" && password.value != "") {
         submitter.removeAttribute("disabled"); 
     } else {
         submitter.setAttribute("disabled", "true");
