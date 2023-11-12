@@ -135,10 +135,8 @@
         location.href="./login";
     }
 
-    function getDayOfWeek(yyyyMMdd){
-        const dayOfWeek = new Date(yyyyMMdd).getDay(); 
-        return dayOfWeek;
-    }
+    const urlParams = new URL(location.href).searchParams;
+    const searchQ = urlParams.get('q');
     
     aToken = "";
     query = new FormData();
@@ -168,17 +166,8 @@
             
             //holy cow
             {
-                let today = new Date();   
-                let year = today.getFullYear(); // 년도
-                let month = today.getMonth() + 2;  // 월
-                let date = today.getDate();  // 날짜
-                let day = today.getDay();  // 요일
-                nextMonthFirst = year + '-' + ((month) < 10 ? "0" + (month) : (month)) + '-01';
-                twoMonthAgo = year + '-' + ((month-5) < 10 ? "0" + (month-5) : (month-5)) + '-01';
-                GyuSo(year + '-' + month + '-' + date);
-
                 query = new FormData();
-                query.append("path", "api/v1/caffeine-log/daily?start="+twoMonthAgo+"&end="+nextMonthFirst);
+                query.append("path", "api/v1/caffeine-log/daily/"+searchQ+"?start=2023-06-01&end=2023-12-01");
                 query.append("req", JSON.stringify({
                                         "refreshToken" : localStorage.getItem('refreshToken'),
                                     }));
@@ -196,11 +185,9 @@
                         return;
                     }
                     //Core Part
-                    initLSB = getDayOfWeek(twoMonthAgo);
-                    lk99 = 0;
                     for (i = 0; i < data["caffeineLogs"].length; i++) {
-                        k = lk99 % 7;
-                        l = (lk99 - (lk99 % 7))/7;
+                        k = i % 7;
+                        l = (i - (i % 7))/7;
                         giveme(l, k).value= data["caffeineLogs"][i]["date"];
                         giveme(l, k).setAttribute("onclick", 'GyuSo(this.value)');
                         if (!data["caffeineLogs"][i]["isSuccess"]) {
@@ -219,7 +206,6 @@
                                 giveme(l, k).style.backgroundColor="#f94144";
                             }
                         }
-                        lk99++;
                     }
                     //Core Part END
                 });
@@ -229,9 +215,9 @@
 
     
     async function GyuSo(date) {
-    typer = [0, 0, 0, 0];
-    keys = ["COFFEE", "ENERGY_DRINK", "DESSERT", "ETC"];
-    shortKeys = ["C", "E", "D", "G"];
+        typer = [0, 0, 0, 0];
+        keys = ["COFFEE", "ENERGY_DRINK", "DESSERT", "ETC"];
+        shortKeys = ["C", "E", "D", "G"];
         hap = 0;
         for (kkk = 0; kkk < 4; kkk++) {
             data = await getType(keys[kkk], date);        
@@ -255,7 +241,7 @@
         //holy cow
         {
             query = new FormData();
-            query.append("path", "api/v1/caffeine-menu/type?type="+type+"&start="+date+"&end="+date);
+            query.append("path", "api/v1/caffeine-menu/type/"+searchQ+"?type="+type+"&start="+date+"&end="+date);
             query.append("req", JSON.stringify({
                                     "refreshToken" : localStorage.getItem('refreshToken'),
                                 }));

@@ -20,6 +20,7 @@
         
         <link rel="shortcut icon" sizes="256x256" href="/favicon.ico">
         <link rel="apple-touch-icon" sizes="256x256" href="/favicon.ico">
+        <script src='//unpkg.com/jquery@3/dist/jquery.min.js'></script>
         <link rel="apple-touch-icon-precomposed" sizes="256x256" href="/favicon.ico">
     </head>
 
@@ -40,18 +41,18 @@
             <div class="content-container">
                 <h4 class="card-title">프로필</h4>
                 <div class="content-card profile-setup">
-                    <img class="background-image" src="https://g-grafolio.pstatic.net/20211208_98/16389573716097tdKX_JPEG/%B5%E5%B8%B5%C5%A9%C4%C4%C7%BB%C5%CD.jpg">
+                    <img id="danjiMilk" onclick="file_input2.click();"style="background-color:#333;" class="background-image" src="https://g-grafolio.pstatic.net/20211208_98/16389573716097tdKX_JPEG/%B5%E5%B8%B5%C5%A9%C4%C4%C7%BB%C5%CD.jpg">
 
                     <div class="profile-container">
-                        <img class="profile-image shadow"
+                        <img id="newjeans" onclick="file_input.click();" class="profile-image shadow"
                              src="https://img.gqkorea.co.kr/gq/2023/07/style_64bb66023207f-1400x933.jpg">
                         
                         <div style="width:100%;">
-                            <h4 class="mb-1">달콤한 아인슈페너</h4>
-                            <h6>계정 가입날짜</h6>
+                            <h4 class="mb-1" id="staticId"></h4>
+                            <h6 id="staticDescription"></h6>
                         </div>
 
-                        <hr style="width:100%; opacity:0.1;">
+                        <hr>
                         <div id="profile_static" style="width:100%; text-align:center;">
                             <table class="profile-elem">
                                 <tr>
@@ -63,8 +64,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        donghwi04@naver.com
+                                    <td id="staticEmail">
                                     </td>
                                 </tr>
                             </table>
@@ -75,35 +75,35 @@
                                         <i class="fa-regular fa-calendar-check fa-lg" style="padding-right:5px;"></i>
                                     </td>
                                     <td>
-                                        <h6>최대 연속 성공 일 수</h6>
+                                        <h6>최대 연속 성공 일수</h6>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        60일
+                                    <td id="staticMaxST">
+                                        
                                     </td>
                                 </tr>
                             </table>
-                            <hr style="width:100%; opacity:0.1;">
+                            <hr>
                             <a  onclick="showForm()" style="color:#111;">수정하기</a>
                         </div>
 
                         <div id="form" style="display:none;">
                             <label>닉네임</label>
-                            <input class="form-control" type="text" value="크리미한 아인슈페너">
+                            <input class="form-control" type="text" id="chNickName" value="">
 
                             <label>한 줄 소개</label>
-                            <input class="form-control" type="text" value="천재 이동휘">
+                            <input class="form-control" type="text" id="chDes" value="">
 
                             <label>생년월일 <small style="color:#AAA;">(다른 사용자에게 공개되지 않습니다.)</small></label>
-                            <input class="form-control" type="date" value="2023.11.09">
+                            <input class="form-control" type="date" id="chBirthday">
 
                             <label>최대 성공일</label>
-                            <input class="form-control mb-3" type="text" disabled value="10일">
+                            <input class="form-control mb-3" type="text" id="chMaxST" disabled value="">
                             
                             <div style="width:100%; text-align:right;">
                                 <button onclick="showForm();" class="btn btn-outline-primary">취소</button>
-                                <button class="btn btn-primary">수정하기</button>
+                                <button onclick="changer();" class="btn btn-primary">수정하기</button>
                             </div>
                         </div>
                     </div>
@@ -112,15 +112,18 @@
                 <h4 class="card-title">친구</h4>
                 <div class="content-card">
                     <div class="input-group">
-                        <input class="form-control focus-ring" style="--bs-focus-ring-color: rgba(0,0,0,0)" placeholder="친구 이메일을 검색하세요">
-                        <button class="btn btn-light" style="border:1px solid #DDD; border-left:none;">
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="inssa" class="form-control focus-ring" style="--bs-focus-ring-color: rgba(0,0,0,0)"
+                                placeholder="친구 이메일을 검색하세요">
+                        <button class="btn btn-light" onclick="outsider();" style="border:1px solid #DDD; border-left:none;">
+                            추가
                         </button>
                     </div>
 
-                    <hr style="width:100%; opacity:0.1;">
+                    <hr>
                     
-                    <img class="alone-img" src="/src/sibal.webp">
+                    <img class="alone-img" src="/src/alone.webp">
+                    <ul id="inssas">
+                    </ul>
                 </div>
             </div>
         </div>
@@ -144,5 +147,191 @@
         x.style.display = "none";
         y.style.display = "block";
       }
+    }
+
+    
+    aToken = "";
+    query = new FormData();
+    query.append("path", "refresh");
+    query.append("req", JSON.stringify({
+                            "refreshToken" : localStorage.getItem('refreshToken'),
+                        }));
+    //View initialization
+    {
+        fetch('https://catalog.cirgle.me/relay.php', {
+            method: 'POST',
+            body: query
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data["code"] != "success") {
+                if (data["code"] == "invalid-005" || data["code"] == "invalid-001") {
+                    alert("토큰이 유효하지 않습니다!");
+                    localStorage.setItem('refreshToken', "");
+                    location.href="/";
+                    return;
+                }
+                alert("서버에 문제가 발생했습니다!\n");
+                return;
+            }
+            aToken = data["token"]["accessToken"];
+    
+            //jkn
+            {
+                query = new FormData();
+                query.append("path", "info");
+                query.append("req", JSON.stringify({
+                                        "refreshToken" : localStorage.getItem('refreshToken'),
+                                    }));
+                query.append("header", "Authorization:"+aToken);
+                query.append("method", "GET");
+
+                fetch('https://catalog.cirgle.me/relay.php', {
+                    method: 'POST',
+                    body: query
+                })
+                .then(res => res.json()).then(data => {
+                    if (data["code"] != "success") {
+                        alert("서버에 문제가 발생했습니다!\n");
+                        return;
+                    }
+                    
+
+                    chNickName.value = staticId.innerText = data["nickname"]; chMaxST.value = staticMaxST.innerText=data["maxStreak"];
+                    chDes.value = staticDescription.innerText = data["description"] == "" ? "여기에 자기소개를 입력하세요!" : data["description"];
+                    staticEmail.innerText = data["displayId"];
+                    chBirthday.value = data["birthday"].replaceAll("/", ".");
+                    newjeans.src=data["profileUrl"]=="" ? newjeans.src :data["profileUrl"];
+                    danjiMilk.src=data["bannerUrl"] == "" ? danjiMilk.src : data["bannerUrl"];
+                });
+            };
+
+            
+        //I am Asa but first
+        {
+            query = new FormData();
+            query.append("path", "api/v1/friends");
+            query.append("req", JSON.stringify({
+                                    "refreshToken" : localStorage.getItem('refreshToken'),
+                                }));
+            query.append("header", "Authorization:"+aToken);
+            query.append("method", "GET");
+
+            fetch('https://catalog.cirgle.me/relay.php', {
+                method: 'POST',
+                body: query
+            })
+            .then(res => res.json()).then(data => {
+                if (data["code"] != "success") {
+                    alert("친구 불러오기에 실패했습니다!\n");
+                    return;
+                }
+                for (i = 0; i < data["friends"].length; i++) {
+                    document.querySelector(".alone-img").style.display = "none";
+                    q = "/streakNo?q="+data["friends"][i]["displayId"];
+                    inssas.innerHTML += "<a href="+q+"><li>"+data["friends"][i]["nickname"]+"<br><small>("+data["friends"][i]["displayId"]+")</small></li></a>";
+                }
+            });
+        };
+        }
+    )};
+
+    function upload_file(type) {
+        if (type == 1) {
+            if(file_input.value == "") {
+                alert("파일이 선택되지 않았습니다!");
+                return false;
+            }
+            data = new FormData(upper);
+        }
+        else {
+            if(file_input2.value == "") {
+                alert("파일이 선택되지 않았습니다!");
+                return false;
+            }
+            data = new FormData(upper2);
+        }
+        var url = "./upload.php";
+        
+        $.ajax({
+            url: url,
+            method: 'post',
+            data: data,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function(res) {
+                if(res.result == "-1") {
+                    alert("오류! 사진이 업로드되지 않았습니다!\n"+res.error);
+                }else if(res.result == "0") {
+                    if (type == 1) {
+                        newjeans.src=res.file;
+                    } else {
+                        danjiMilk.src=res.file;
+                    }
+                }
+            },
+            error : function(request,status,error) {
+                alert("오류! 업로드에 실패했습니다!\n");
+            }
+        });
+    }
+
+    function outsider() {
+        //I am Asa
+        {
+            query = new FormData();
+            query.append("path", "api/v1/friends");
+            query.append("req", JSON.stringify({
+                                    "refreshToken" : localStorage.getItem('refreshToken'),
+                                    "displayId" : inssa.value,
+                                }));
+            query.append("header", "Authorization:"+aToken);
+            query.append("method", "POST");
+
+            fetch('https://catalog.cirgle.me/relay.php', {
+                method: 'POST',
+                body: query
+            })
+            .then(res => res.json()).then(data => {
+                if (data["code"] != "success") {
+                    alert("친구 추가에 실패했습니다!!\n");
+                    return;
+                }
+                alert("성공적으로 친구를 추가했습니다!");
+                location.href="/setting";
+            });
+        };
+    }
+
+    function changer() {
+        //jkn
+        {
+            query = new FormData();
+            query.append("path", "info");
+            query.append("req", JSON.stringify({
+                                    "refreshToken" : localStorage.getItem('refreshToken'),
+                                    "nickname" : chNickName.value,
+                                    "description" : chDes.value,
+                                    "birthday" : chBirthday.value,
+                                    "profileUrl" : newjeans.src,
+                                    "bannerUrl" : danjiMilk.src,
+                                }));
+            query.append("header", "Authorization:"+aToken);
+            query.append("method", "POST");
+
+            fetch('https://catalog.cirgle.me/relay.php', {
+                method: 'POST',
+                body: query
+            })
+            .then(res => res.json()).then(data => {
+                if (data["code"] != "success") {
+                    alert("서버에 문제가 발생했습니다!\n");
+                    return;
+                }
+                alert("성공적으로 수정했습니다!");
+                location.href="/setting";
+            });
+        };
     }
 </script>

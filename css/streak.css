@@ -39,6 +39,34 @@ color code
     letter-spacing:-0.7px;
 }
 
+/* stat */
+
+.statistic-table {
+    width:100%;
+    text-align:left;
+    border-color:#EEE;
+}
+
+td:nth-child(2) {
+    text-align:right;
+}
+td:nth-child(1) {
+    text-align:left;
+}
+td {
+    padding:10px;
+}
+
+/* stat end */
+
+.union {
+    display:flex;
+    flex-direction:row;
+    padding:0;
+    margin:0;
+    text-align:right;
+}
+
 .streak {
     display:flex;
     flex-direction:row;
@@ -46,8 +74,10 @@ color code
 }
 
 .streak-unit {
-    width:15px;
-    height:15px;
+    display:inline-block;
+
+    width:17px;
+    height:17px;
 
     margin:2px;
 
@@ -56,66 +86,46 @@ color code
     /* margin:10px 0px 10px 0px; */
 }
 
-.index-container {
-    display:flex;
-    flex-direction: row;
-    flex-wrap:wrap;
+.kawaii-unit {
+    display:block;
+    height:17px;
 
+    margin:2px;
+    border-radius:3px;
+}
+
+.twenty-seven {
     width:100%;
-    
-    padding-top:10px;
-    padding-right:40px;
+    word-break:keep-all;
+    white-space:nowrap;
+    margin:0;
 }
 
-.index-box {
-    display:flex;
-    flex-direction: row;
-    flex-wrap:wrap;
-    width:49%;
+.large-streak {
+    overflow-x: auto;
 }
 
-.index-indicator {
-    border-radius:50%;
-    width:10px;
-    height:10px;
-    margin:5px;
-}
+/* Hansome Index */
+    .index-container {
+        display:flex;
+        flex-direction: row;
+        flex-wrap:wrap;
 
-/* icon data */
-
-    .icon {
-        background: #666;
-        border-radius: 100%;
-        color: #ffffff;
-        cursor: default;
-        display: inline-block;
-        height: 2em;
-        line-height: 2em;
-        width: 2em;
-        text-align:center;
+        width:100%;
+        
+        padding-top:10px;
     }
 
-    .icon.accent1 {
-        background: #666;
-        color: #ffffff;
+    .index-box {
+        display:flex;
+        flex-direction: row;
+        flex-wrap:wrap;
+        width:49%;
     }
 
-    .icon.accent2 {
-        background: #e89980;
-        color: #ffffff;
-    }
-
-    .icon.accent3 {
-        background: #7fcdb8;
-        color: #ffffff;
-    }
-
-    .icon.accent4 {
-        background: #90b0ba;
-        color: #ffffff;
-    }
-
-    .icon.accent5 {
-        background: #a7866b;
-        color: #ffffff;
+    .index-indicator {
+        border-radius:50%;
+        width:10px;
+        height:10px;
+        margin:5px;
     }

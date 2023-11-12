@@ -10,6 +10,10 @@ body {
     background-color :#eee;
     color:rgb(25, 25, 25);
 }
+hr {
+    width:100%;
+    opacity:0.1;
+}
 
 p {
     font-family: 'HakgyoansimWoojuR';

@@ -135,7 +135,6 @@ color code
     width:100%;
     
     padding-top:10px;
-    padding-right:40px;
 }
 
 .index-box {
@@ -151,42 +150,3 @@ color code
     height:10px;
     margin:5px;
 }
-
-/* icon data */
-
-    .icon {
-        background: #666;
-        border-radius: 100%;
-        color: #ffffff;
-        cursor: default;
-        display: inline-block;
-        height: 2em;
-        line-height: 2em;
-        width: 2em;
-        text-align:center;
-    }
-
-    .icon.accent1 {
-        background: #666;
-        color: #ffffff;
-    }
-
-    .icon.accent2 {
-        background: #e89980;
-        color: #ffffff;
-    }
-
-    .icon.accent3 {
-        background: #7fcdb8;
-        color: #ffffff;
-    }
-
-    .icon.accent4 {
-        background: #90b0ba;
-        color: #ffffff;
-    }
-
-    .icon.accent5 {
-        background: #a7866b;
-        color: #ffffff;
-    }

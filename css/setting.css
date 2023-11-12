@@ -94,3 +94,15 @@ label {
 .alone-img {
     width:100%;
 }
+
+li {
+    margin-bottom:10px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    white-space: no-warp;
+    text-overflow:ellipsis;
+    line-height:1em;
+}

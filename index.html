@@ -67,7 +67,8 @@
 
                 <!--Main Content Start-->
                 <h4 class="card-title">Recent Logs</h4>
-                <div class="content-card">
+                <div class="content-card" onclick="location.href='/streak'">
+                    <h6 style="margin-bottom:5px;">최장 기록 : <text id="maxi">0</text>일</h6>
                     <div class="streak"></div>
                     <p style="margin:20px 0px 0px 0px; font-family: 'Pretendard-Regular'; color:#999;">
                         <i class="fa-solid fa-circle-info"></i>
@@ -78,30 +79,30 @@
                 </div>
 
                 <h4 class="card-title">Categories</h4>
-                <div class="content-card">
+                <div class="content-card" onclick="location.href='/streak'">
                     <div class="progress-container" style="margin-top:3px;">
                         <div class="progress" role="progressbar" style="height:20px; margin-bottom:2px;">
-                            <div class="progress-bar" style="width: 10%; background-color: #7f4f24;"></div>
-                            <div class="progress-bar" style="width: 10%; background-color: #a68a64;"></div>
-                            <div class="progress-bar" style="width: 60%; background-color: #936639;"></div>
-                            <div class="progress-bar" style="width: 10%; background-color: #582f0e;"></div>
+                            <div class="progress-bar cat-progress-bar" style="width: 0%; background-color: #7f4f24;"></div>
+                            <div class="progress-bar cat-progress-bar" style="width: 0%; background-color: #a68a64;"></div>
+                            <div class="progress-bar cat-progress-bar" style="width: 0%; background-color: #936639;"></div>
+                            <div class="progress-bar cat-progress-bar" style="width: 0%; background-color: #582f0e;"></div>
                         </div>
                         <div class="index-container">
                             <div class="index-box">
                                 <div class="index-indicator" style="background-color:#7f4f24;"></div>
-                                <small>커피<small>(10%)</small></small>
+                                <small>커피<small id="C"> 0%</small></small>
                             </div>
                             <div class="index-box">
                                 <div class="index-indicator" style="background-color:#a68a64;"></div>
-                                <small>에너지음료<small>(10%)</small></small>
+                                <small>에너지음료<small id="E"> 0%</small></small>
                             </div>
                             <div class="index-box">
                                 <div class="index-indicator" style="background-color:#936639;"></div>
-                                <small>디저트<small>(10%)</small></small>
+                                <small>디저트<small id="D"> 0%</small></small>
                             </div>
                             <div class="index-box">
                                 <div class="index-indicator" style="background-color:#582f0e;"></div>
-                                <small>기타<small>(10%)</small></small>
+                                <small>기타<small id="G"> 0%</small></small>
                             </div>
                         </div>
                     </div>
@@ -147,7 +148,50 @@
     if (!localStorage.getItem('refreshToken')) {
         location.href="./login";
     }
+    
+    typer = [0, 0, 0, 0];
+    keys = ["COFFEE", "ENERGY_DRINK", "DESSERT", "ETC"];
+    shortKeys = ["C", "E", "D", "G"];
 
+    async function getType(type, date) {
+        //holy cow
+        {
+            query = new FormData();
+            query.append("path", "api/v1/caffeine-menu/type?type="+type+"&start="+date+"&end="+date);
+            query.append("req", JSON.stringify({
+                                    "refreshToken" : localStorage.getItem('refreshToken'),
+                                }));
+            query.append("header", "Authorization:"+aToken);
+            query.append("method", "GET");
+
+            return fetch('https://catalog.cirgle.me/relay.php', {
+                method: 'POST',
+                body: query
+            })
+            .then(res => res.json());
+        };
+    }
+
+    async function GyuSo(date) {
+        hap = 0;
+        for (kkk = 0; kkk < 4; kkk++) {
+            data = await getType(keys[kkk], date);        
+            if (data["code"] != "success") {
+                alert("서버에 문제가 발생했습니다!\n");
+                return;
+            }
+        
+            for (i = 0;  i < data["consumedMenuList"].length; i++) {
+                typer[kkk] += data["consumedMenuList"][i]["caffeine"];
+            }
+            hap += typer[kkk];
+        }
+        for (i = 0; i < 4; i++) {
+            document.querySelectorAll(".cat-progress-bar")[i].style.width = (typer[i] / hap * 100) + "%";
+            document.querySelector("#"+shortKeys[i]).innerText = " "+~~((typer[i] / hap * 100)*100)/100 + "%";
+        }
+    }
+    
     // Signed in Status
 
     aToken = ""
@@ -172,6 +216,12 @@
         .then(res => res.json())
         .then(data => {
             if (data["code"] != "success") {
+                if (data["code"] == "invalid-005" || data["code"] == "invalid-001") {
+                    alert("토큰이 유효하지 않습니다!");
+                    localStorage.setItem('refreshToken', "");
+                    location.href="/";
+                    return;
+                }
                 alert("서버에 문제가 발생했습니다!\n");
                 return;
             }
@@ -194,14 +244,20 @@
                 .then(res => res.json())
                 .then(data => {
                 if (data["code"] != "success") {
+                    if (data["code"] == "invalid-005" || data["code"] == "invalid-001") {
+                        alert("토큰이 유효하지 않습니다!");
+                        localStorage.setItem('refreshToken', "");
+                        location.href="/";
+                    }
                     alert("서버에 문제가 발생했습니다!\n");
                     return;
                 }
                 //Core Part
                 maxCaffeine.innerText = data["caffeineLogDetail"]["maxCaffeine"]+"mg";
                 maxCaffeineNum = data["caffeineLogDetail"]["maxCaffeine"];
-                if (data["caffeineLogDetail"]["maxStreak"] > 0) {
-                    streakAdvisor.innerText = data["caffeineLogDetail"]["maxStreak"] + "일째 카페인을 Null Null하게 마셨어요!";
+                maxi.innerText = data["caffeineLogDetail"]["maxStreak"];
+                if (data["caffeineLogDetail"]["streak"] > 0) {
+                    streakAdvisor.innerText = data["caffeineLogDetail"]["streak"] + "일 연속 카페인을 건강하게 섭취했어요!";
                 } else {
                     streakAdvisor.innerText = "건강을 생각해보는건 어떨까요?";
                 }
@@ -227,6 +283,11 @@
                 .then(res => res.json())
                 .then(data => {
                 if (data["code"] != "success") {
+                    if (data["code"] == "invalid-005" || data["code"] == "invalid-001") {
+                        alert("토큰이 유효하지 않습니다!");
+                        localStorage.setItem('refreshToken', "");
+                        location.href="/";
+                    }
                     alert("서버에 문제가 발생했습니다!\n");
                     return;
                 }
@@ -269,6 +330,11 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data["code"] != "success") {
+                        if (data["code"] == "invalid-005" || data["code"] == "invalid-001") {
+                            alert("토큰이 유효하지 않습니다!");
+                            localStorage.setItem('refreshToken', "");
+                            location.href="/";
+                        }
                         alert("서버에 문제가 발생했습니다!\n");
                         return;
                     }
@@ -313,6 +379,11 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data["code"] != "success") {
+                        if (data["code"] == "invalid-005" || data["code"] == "invalid-001") {
+                            alert("토큰이 유효하지 않습니다!");
+                            localStorage.setItem('refreshToken', "");
+                            location.href="/";
+                        }
                         alert("서버에 문제가 발생했습니다!\n");
                         return;
                     }
@@ -324,6 +395,13 @@
                 });
             }
             //GetMenu end
+
+            let today = new Date();   
+            let year = today.getFullYear(); // 년도
+            let month = today.getMonth() + 1;  // 월
+            let date = today.getDate();  // 날짜
+            let day = today.getDay();  // 요일
+            GyuSo(year + '-' + month + '-' + date);
         });
     }
 
