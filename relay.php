@@ -24,7 +24,7 @@ if (isset($_POST["method"])) {
     }
     if ($_POST["method"] == "DELETE") {
         //curl_setopt($ch,CURLOPT_POST, false);
-        die("아직 구현 안했어 이 씨발롬아");
+        die("미구현기능");
     }
 } else {
     curl_setopt($ch,CURLOPT_POSTFIELDS, $_POST["req"]);
